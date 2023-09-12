@@ -1,0 +1,65 @@
+3)
+const apiUrl = 'https://restcountries.com/v3.1/name/YOUR_COUNTRY_NAME'; 
+const countryInfoContainer = document.querySelector('.country-info');
+async function fetchCountryData() {
+  try {
+    const response = await fetch(apiUrl);
+    if (response.ok) {
+      const data = await response.json();
+      const countryData = data[0];
+      updateCountryInfo(countryData);
+    } else {
+      throw new Error('Unable to fetch country data.');
+    }
+  } catch (error) {
+    console.error(error);
+    countryInfoContainer.innerHTML = '<p>Unable to fetch country data.</p>';
+  }
+}
+function updateCountryInfo(countryData) {
+  countryInfoContainer.innerHTML = `
+    <h2>${countryData.name.common}</h2>
+    <p>Capital: ${countryData.capital}</p>
+    <p>Population: ${countryData.population.toLocaleString()}</p>
+    <p>Region: ${countryData.region}</p>
+    <p>Subregion: ${countryData.subregion}</p>
+    <p>Flag: <img src="${countryData.flags.png}" alt="${countryData.name.common} Flag"></p>
+  `;
+}
+window.addEventListener('load', fetchCountryData);
+
+
+---------------------------3)alternate---------------------------------
+const apiUrl = 'https://restcountries.com/v3.1/name/YOUR_COUNTRY_NAME'; 
+const countryInfoContainer = document.querySelector('.country-info');
+const loadingMessage = countryInfoContainer.querySelector('p');
+async function fetchCountryData() {
+  try {
+    const response = await fetch(apiUrl);
+    if (response.ok) {
+      const data = await response.json();
+      const countryData = data[0];
+      updateCountryInfo(countryData);
+    } else {
+      throw new Error('Unable to fetch country data.');
+    }
+  } catch (error) {
+    console.error(error);
+    loadingMessage.textContent = 'Unable to fetch country data.';
+  }
+}
+function updateCountryInfo(countryData) {
+  loadingMessage.style.display = 'none';
+  countryInfoContainer.innerHTML = `
+    <h2>${countryData.name.common}</h2>
+    <p>Capital: ${countryData.capital}</p>
+    <p>Population: ${countryData.population.toLocaleString()}</p>
+    <p>Region: ${countryData.region}</p>
+    <p>Subregion: ${countryData.subregion}</p>
+    <p>Flag: <img src="${countryData.flags.png}" alt="${countryData.name.common} Flag"></p>
+  `;
+}
+window.addEventListener('load', fetchCountryData);
+
+
+
