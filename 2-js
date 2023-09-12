@@ -1,0 +1,61 @@
+2)
+const apiUrl = 'https://type.fit/api/quotes';
+const quoteContainer = document.querySelector('.quote');
+const newQuoteButton = document.getElementById('new-quote-btn');
+async function fetchRandomQuote() {
+  try {
+    const response = await fetch(apiUrl);
+    if (response.ok) {
+      const data = await response.json();
+      const randomIndex = Math.floor(Math.random() * data.length);
+      const randomQuote = data[randomIndex];
+      updateQuote(randomQuote.text, randomQuote.author);
+    } else {
+      throw new Error('Unable to fetch a random quote.');
+    }
+  } catch (error) {
+    console.error(error);
+    quoteContainer.innerHTML = '<p>Unable to fetch a random quote.</p>';
+  }
+}
+function updateQuote(text, author) {
+  quoteContainer.innerHTML = `
+    <p>${text}</p>
+    <p>- ${author || 'Unknown'}</p>
+  `;
+}
+newQuoteButton.addEventListener('click', fetchRandomQuote);
+window.addEventListener('load', fetchRandomQuote);
+
+---------------2)alternate-------------------------------------------------------
+const apiUrl = 'https://type.fit/api/quotes';
+const quoteContainer = document.querySelector('.quote');
+const newQuoteButton = document.getElementById('new-quote-btn');
+async function fetchRandomQuote() {
+  try {
+    const response = await fetch(apiUrl);
+    if (response.ok) {
+      const data = await response.json();
+      const randomIndex = getRandomIndex(data.length);
+      const randomQuote = data[randomIndex];
+      updateQuote(randomQuote.text, randomQuote.author);
+    } else {
+      throw new Error('Unable to fetch a random quote.');
+    }
+  } catch (error) {
+    console.error(error);
+    quoteContainer.innerHTML = '<p>Unable to fetch a random quote.</p>';
+  }
+}
+function getRandomIndex(max) {
+  return Math.floor(Math.random() * max);
+}
+function updateQuote(text, author) {
+  quoteContainer.innerHTML = `
+    <p>${text}</p>
+    <p>- ${author || 'Unknown'}</p>
+  `;
+}
+newQuoteButton.addEventListener('click', fetchRandomQuote);
+window.addEventListener('load', fetchRandomQuote);
+
