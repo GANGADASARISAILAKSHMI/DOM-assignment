@@ -1,0 +1,63 @@
+1)
+
+const apiKey = 'YOUR_API_KEY';
+const apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=YOUR_CITY&units=metric&appid=' + apiKey;
+async function fetchWeatherData() {
+  try {
+    const response = await fetch(apiUrl);
+    if (response.ok) {
+      const data = await response.json();
+      const weatherContainer = document.querySelector('.weather-data');
+      weatherContainer.innerHTML = `
+        <h2>${data.name}, ${data.sys.country}</h2>
+        <p>Temperature: ${data.main.temp}°C</p>
+        <p>Weather: ${data.weather[0].description}</p>
+        <p>Humidity: ${data.main.humidity}%</p>
+        <p>Wind Speed: ${data.wind.speed} m/s</p>
+      `;
+    } else {
+      throw new Error('Unable to fetch weather data.');
+    }
+  } catch (error) {
+    console.error(error);
+    const weatherContainer = document.querySelector('.weather-data');
+    weatherContainer.innerHTML = '<p>Unable to fetch weather data.</p>';
+  }
+}
+window.addEventListener('load', fetchWeatherData);
+
+
+-----------------------1 -alternate-----------------------------------------------------
+const apiKey = 'YOUR_API_KEY'; 
+const city = 'YOUR_CITY'; 
+const weatherContainer = document.querySelector('.weather-data');
+const loadingMessage = weatherContainer.querySelector('p');
+async function fetchWeatherData() {
+  try {
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`);
+    if (response.ok) {
+      const data = await response.json();
+      updateWeatherInfo(data);
+    } else {
+      throw new Error('Unable to fetch weather data.');
+    }
+  } catch (error) {
+    console.error(error);
+    loadingMessage.textContent = 'Unable to fetch weather data.';
+  }
+}
+function updateWeatherInfo(data) {
+  const { name, sys, main, weather, wind } = data;
+  loadingMessage.style.display = 'none';
+  weatherContainer.innerHTML = `
+    <h2>${name}, ${sys.country}</h2>
+    <p>Temperature: ${main.temp}°C</p>
+    <p>Weather: ${weather[0].description}</p>
+    <p>Humidity: ${main.humidity}%</p>
+    <p>Wind Speed: ${wind.speed} m/s</p>
+  `;
+}
+window.addEventListener('load', fetchWeatherData);
+
+
+
